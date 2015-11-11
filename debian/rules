@@ -1,0 +1,93 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# This file is public domain software, originally written by Joey Hess.
+#
+# This version is for packages that are architecture dependent.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PACKAGE_NAME=mutant-example
+BUILD_DIR=$(CURDIR)/debian/$(PACKAGE_NAME)
+DESTDIR=$(CURDIR)/debian/$(PACKAGE_NAME)/var/www/$(PACKAGE_NAME)
+APP_FILES=README.md .bundle Gemfile Gemfile.lock bin spec support vendor log
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+
+	git submodule init
+	git submodule update
+
+	rm -rf tmp log
+	mkdir -p tmp/pids tmp/caches tmp/sessions tmp/sockets log
+	rm -rf vendor/bundle
+	gem install bundler --no-rdoc --no-ri
+	bundle install --path vendor/bundle --without "development test"
+
+	# Creating environment files based on its examples
+#	cp config/app_config.yml.example config/app_config.yml
+#	cp config/database.yml.example config/database.yml
+
+#	bundle exec rake assets:clean RAILS_ENV=production
+#	bundle exec rake assets:precompile RAILS_ENV=production
+
+	# Removing environment files
+#	rm config/app_config.yml
+#	rm config/database.yml
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+
+	mkdir -p $(DESTDIR)
+	cp -r $(APP_FILES) $(DESTDIR)
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+#	dh_installdocs
+#	dh_installexamples
+#	dh_install
+#	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installcatalogs
+#	dh_installpam
+#	dh_installmime
+	dh_installinit -n -R
+#	dh_installcron
+#	dh_installinfo
+#	dh_installwm
+#	dh_installudev
+#	dh_lintian
+#	dh_bugfiles
+#	dh_undocumented
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_perl
+#	dh_makeshlibs
+	dh_installdeb
+#	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

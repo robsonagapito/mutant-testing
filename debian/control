@@ -1,0 +1,13 @@
+Source: mutant-example
+Section: external_applications
+Priority: extra
+Maintainer: QA Locaweb <operacoes-qa@locaweb.com.br>
+Build-Depends: ruby2.0 | ruby1.9.1, ruby2.0-dev | ruby1.9.1-dev
+Standards-Version: 1.0
+Homepage: https://code.locaweb.com.br/qualidade/mutant-example
+
+Package: mutant-example
+Architecture: all
+Depends: ruby2.0 | ruby1.9.1, bundler, libxslt1.1
+Suggests:
+Description: Mutant Testing (QA Locaweb)

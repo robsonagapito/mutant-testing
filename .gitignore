@@ -1,0 +1,7 @@
+/.bundle
+/log/*
+!/log/.keep
+/tmp
+errors
+/coverage/*
+.DS_Store
