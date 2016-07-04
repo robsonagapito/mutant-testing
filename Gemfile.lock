@@ -1,5 +1,5 @@
 GEM
-  remote: https://gems.locaweb.com.br/
+  remote: https://rubygems.org/
   specs:
     abstract_type (0.0.7)
     adamantium (0.2.0)
